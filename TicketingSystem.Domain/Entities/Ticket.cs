@@ -6,7 +6,9 @@ namespace TicketingSystem.Domain.Entities;
 
 public sealed class Ticket : BaseEntity
 {
+    private const int MaxTicketNumberLength = 50;
     private const int MaxTitleLength = 200;
+    private const int MaxDescriptionLength = 10_000;
 
     private readonly List<Comment> _comments = [];
 
@@ -31,29 +33,24 @@ public sealed class Ticket : BaseEntity
     public IReadOnlyCollection<Comment> Comments =>
         _comments.AsReadOnly();
 
-    private Ticket() { }
-
+    private Ticket(){}
     public Ticket(Guid tenantId, string ticketNumber, string title, string description, Guid customerId, Guid? categoryId = null)
     {
         if (tenantId == Guid.Empty)
-            throw new DomainException("Tenant ID cannot be empty.");
+            throw new DomainException(
+                "Tenant ID cannot be empty.");
 
         if (customerId == Guid.Empty)
-            throw new DomainException("Customer ID cannot be empty.");
-
-        if (string.IsNullOrWhiteSpace(ticketNumber))
-            throw new DomainException("Ticket number cannot be empty.");
-
-        SetTitle(title);
-
-        if (string.IsNullOrWhiteSpace(description))
-            throw new DomainException("Ticket description cannot be empty.");
+            throw new DomainException(
+                "Customer ID cannot be empty.");
 
         TenantId = tenantId;
-        TicketNumber = ticketNumber.Trim();
-        Description = description.Trim();
         CustomerId = customerId;
         CategoryId = categoryId;
+
+        SetTicketNumber(ticketNumber);
+        SetTitle(title);
+        SetDescription(description);
 
         Status = TicketStatus.Open;
         Priority = TicketPriority.Medium;
@@ -67,18 +64,15 @@ public sealed class Ticket : BaseEntity
 
     public void ChangeDescription(string description)
     {
-        if (string.IsNullOrWhiteSpace(description))
-            throw new DomainException(
-                "Ticket description cannot be empty.");
-
-        Description = description.Trim();
+        SetDescription(description);
         UpdatedAt = DateTime.UtcNow;
     }
 
     public void AssignToTeam(Guid teamId)
     {
         if (teamId == Guid.Empty)
-            throw new DomainException("Team ID cannot be empty.");
+            throw new DomainException(
+                "Team ID cannot be empty.");
 
         TeamId = teamId;
         AgentId = null;
@@ -89,7 +83,8 @@ public sealed class Ticket : BaseEntity
     public void AssignToAgent(Guid agentId)
     {
         if (agentId == Guid.Empty)
-            throw new DomainException("Agent ID cannot be empty.");
+            throw new DomainException(
+                "Agent ID cannot be empty.");
 
         AgentId = agentId;
 
@@ -104,6 +99,10 @@ public sealed class Ticket : BaseEntity
 
     public void ChangePriority(TicketPriority priority)
     {
+        if (!Enum.IsDefined(priority))
+            throw new DomainException(
+                "Invalid ticket priority.");
+
         Priority = priority;
         UpdatedAt = DateTime.UtcNow;
     }
@@ -162,13 +161,11 @@ public sealed class Ticket : BaseEntity
 
     public void Reopen()
     {
-        if (Status != TicketStatus.Closed &&
-            Status != TicketStatus.Resolved)
+        if (Status != TicketStatus.Closed && Status != TicketStatus.Resolved)
         {
             throw new DomainException(
                 "Only resolved or closed tickets can be reopened.");
         }
-
         Status = TicketStatus.Open;
         ResolvedAt = null;
         ClosedAt = null;
@@ -179,8 +176,23 @@ public sealed class Ticket : BaseEntity
     {
         ArgumentNullException.ThrowIfNull(comment);
 
+        if (comment.TicketId != Id)
+            throw new DomainException(
+                "Comment does not belong to this ticket.");
+
         _comments.Add(comment);
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    private void SetTicketNumber(string ticketNumber)
+    {
+        if (string.IsNullOrWhiteSpace(ticketNumber))
+            throw new DomainException("Ticket number cannot be empty.");
+
+        if (ticketNumber.Length > MaxTicketNumberLength)
+            throw new DomainException($"Ticket number cannot exceed {MaxTicketNumberLength} characters.");
+
+        TicketNumber = ticketNumber.Trim();
     }
 
     private void SetTitle(string title)
@@ -190,9 +202,19 @@ public sealed class Ticket : BaseEntity
                 "Ticket title cannot be empty.");
 
         if (title.Length > MaxTitleLength)
-            throw new DomainException(
-                $"Ticket title cannot exceed {MaxTitleLength} characters.");
+            throw new DomainException($"Ticket title cannot exceed {MaxTitleLength} characters.");
 
         Title = title.Trim();
+    }
+
+    private void SetDescription(string description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            throw new DomainException("Ticket description cannot be empty.");
+
+        if (description.Length > MaxDescriptionLength)
+            throw new DomainException($"Ticket description cannot exceed {MaxDescriptionLength} characters.");
+
+        Description = description.Trim();
     }
 }
