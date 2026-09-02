@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/docs/" />
+  <Folder Name="/src/">
+    <Project Path="TicketingSystem.Application/TicketingSystem.Application.csproj" />
+    <Project Path="TicketingSystem.Domain/TicketingSystem.Domain.csproj" />
+    <Project Path="TicketingSystem.Infrastructure/TicketingSystem.Infrastructure.csproj" />
+    <Project Path="TicketingSystem/TicketingSystem.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>

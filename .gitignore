@@ -1,0 +1,107 @@
+# =========================
+# Visual Studio
+# =========================
+
+.vs/
+.vscode/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+# Build Results
+# =========================
+
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# =========================
+# .NET
+# =========================
+
+*.dll
+*.exe
+*.pdb
+*.cache
+*.nupkg
+*.snupkg
+
+# =========================
+# NuGet
+# =========================
+
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+# =========================
+# ASP.NET Core
+# =========================
+
+appsettings.Development.json
+appsettings.Local.json
+
+# User Secrets
+secrets.json
+
+# =========================
+# Entity Framework
+# =========================
+
+*.db
+*.db-shm
+*.db-wal
+
+# =========================
+# Test Results
+# =========================
+
+TestResults/
+coverage/
+coverage*.xml
+
+# =========================
+# OS
+# =========================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =========================
+# JetBrains Rider
+# =========================
+
+.idea/
+*.sln.iml
+
+# =========================
+# Temporary Files
+# =========================
+
+*.tmp
+*.temp
+*.log
+*.swp
+*.bak
+
+# =========================
+# Docker
+# =========================
+
+docker-compose.override.yml
+
+# =========================
+# Environment Variables
+# =========================
+
+.env
+.env.*
+!.env.example
