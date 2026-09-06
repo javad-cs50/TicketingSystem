@@ -1,6 +1,6 @@
 ﻿namespace TicketingSystem.Application.Common.Authorization;
 
-public static class Roles
+public static class UserRoles
 {
     public const string PlatformAdmin = "PlatformAdmin";
     public const string TenantAdmin = "TenantAdmin";
