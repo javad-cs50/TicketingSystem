@@ -1,12 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Application.Abstractions.Identity;
 using TicketingSystem.Application.Abstractions.Persistence;
 using TicketingSystem.Domain.Entities;
+using TicketingSystem.Infrastructure.Identity;
 
 namespace TicketingSystem.Infrastructure.Persistence;
 
 public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ICurrentUserService currentUserService)
-    : DbContext(options), IUnitOfWork
+    : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options), IUnitOfWork
 {
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<Team> Teams => Set<Team>();
