@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TicketingSystem.Application.Abstractions.Identity;
 using TicketingSystem.Application.Abstractions.Persistence;
+using TicketingSystem.Infrastructure.Authentication.Jwt;
 using TicketingSystem.Infrastructure.Identity;
 using TicketingSystem.Infrastructure.Persistence;
 using TicketingSystem.Infrastructure.Persistence.Repositories;
@@ -44,6 +45,8 @@ public static class DependencyInjection
         services.AddScoped<IIdentityService, IdentityService>();
         //UserService
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        //jwt
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
         return services;
     }
