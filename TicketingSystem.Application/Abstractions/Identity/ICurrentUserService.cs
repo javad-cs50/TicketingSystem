@@ -6,7 +6,8 @@ namespace TicketingSystem.Application.Abstractions.Identity;
 
 public interface ICurrentUserService
 {
-    Guid UserId { get; }
+    //there is no userid or tenantid for unauthenticated user 
+    Guid? UserId { get; }
     Guid? TenantId { get; }
 
     bool IsAuthenticated { get; }
