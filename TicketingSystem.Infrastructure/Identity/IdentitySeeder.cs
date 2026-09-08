@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Net;
 using TicketingSystem.Application.Common.Authorization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TicketingSystem.Infrastructure.Identity;
 

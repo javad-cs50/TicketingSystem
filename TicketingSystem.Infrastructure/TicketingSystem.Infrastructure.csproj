@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TicketingSystem.Application\TicketingSystem.Application.csproj" />
     <ProjectReference Include="..\TicketingSystem.Domain\TicketingSystem.Domain.csproj" />
+	  <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>

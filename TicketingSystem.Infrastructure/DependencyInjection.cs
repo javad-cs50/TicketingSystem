@@ -7,6 +7,7 @@ using TicketingSystem.Application.Abstractions.Persistence;
 using TicketingSystem.Infrastructure.Identity;
 using TicketingSystem.Infrastructure.Persistence;
 using TicketingSystem.Infrastructure.Persistence.Repositories;
+using TicketingSystem.Infrastructure.Services;
 
 namespace TicketingSystem.Infrastructure;
 
@@ -14,6 +15,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+
         //Database
         services.AddDbContext<ApplicationDbContext>(option => option.UseNpgsql(configuration.GetConnectionString("Default")));
 
@@ -39,6 +42,8 @@ public static class DependencyInjection
 
         // Identity abstraction
         services.AddScoped<IIdentityService, IdentityService>();
+        //UserService
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }
