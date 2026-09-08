@@ -14,12 +14,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
 using (var scope = app.Services.CreateScope())
 {
     var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
     await IdentitySeeder.SeedAsync(roleManger);
 }
-;
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -28,6 +28,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
