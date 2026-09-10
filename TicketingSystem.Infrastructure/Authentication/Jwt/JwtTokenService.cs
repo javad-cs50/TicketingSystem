@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.Intrinsics.Arm;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using TicketingSystem.Application.Abstractions.Authentication;
 
@@ -44,11 +46,15 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenServic
 
     public string GenerateRefreshToken()
     {
-        throw new NotImplementedException();
+        var randomByte = RandomNumberGenerator.GetBytes(64);
+        return Convert.ToBase64String(randomByte);
     }
 
     public string HashRefreshToken(string token)
     {
-        throw new NotImplementedException();
+        using var sha256 = SHA256.Create() ;
+        var hashedToken = sha256.ComputeHash(Encoding.UTF8.GetBytes(token));
+
+        return Convert.ToBase64String(hashedToken);
     }
 }
