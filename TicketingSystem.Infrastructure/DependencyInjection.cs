@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TicketingSystem.Application.Abstractions.Authentication;
 using TicketingSystem.Application.Abstractions.Identity;
 using TicketingSystem.Application.Abstractions.Persistence;
 using TicketingSystem.Infrastructure.Authentication.Jwt;
@@ -49,6 +50,8 @@ public static class DependencyInjection
         //UserService
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         //jwt
+        services.AddScoped<ITokenService,JwtTokenService>();
+
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
 
         var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() 
