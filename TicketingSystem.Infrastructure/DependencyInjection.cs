@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TicketingSystem.Application.Abstractions.Identity;
 using TicketingSystem.Application.Abstractions.Persistence;
 using TicketingSystem.Infrastructure.Authentication.Jwt;
@@ -47,6 +50,24 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         //jwt
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+
+        var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() 
+            ?? throw new InvalidOperationException("JWT configuration is missing.");
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer
+            (option => option.TokenValidationParameters = new()
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtOptions.Issuer,
+
+                ValidateAudience = true,
+                ValidAudience = jwtOptions.Audience,
+
+                ValidateLifetime = true,
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
+
+            });
 
         return services;
     }
