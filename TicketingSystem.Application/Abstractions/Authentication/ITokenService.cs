@@ -3,6 +3,6 @@
 public interface ITokenService
 {
     AccessTokenResult GenerateAccessToken(Guid userId, Guid? tenantId, IEnumerable<string> roles);
-    string GenerateRefreshToken();
+    RefreshTokenResult GenerateRefreshToken();
     string HashRefreshToken(string token);
 }

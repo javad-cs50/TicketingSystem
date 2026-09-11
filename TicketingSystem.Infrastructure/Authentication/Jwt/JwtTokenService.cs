@@ -43,10 +43,11 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options) : ITokenServic
         return new AccessTokenResult(tokenString, expiresAt);
     }
 
-    public string GenerateRefreshToken()
+    public RefreshTokenResult GenerateRefreshToken()
     {
         var randomByte = RandomNumberGenerator.GetBytes(64);
-        return Convert.ToBase64String(randomByte);
+        var refreshToken = Convert.ToBase64String(randomByte);
+        return new RefreshTokenResult(refreshToken, DateTime.UtcNow.AddDays(options.Value.RefreshTokenExpirationDays));
     }
 
     public string HashRefreshToken(string token)
