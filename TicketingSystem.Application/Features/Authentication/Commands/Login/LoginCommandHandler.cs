@@ -20,7 +20,7 @@ public sealed class LoginCommandHandler
 
         if (userId is null)
         {
-            throw new UnauthorizedAccessException("email not exist.");
+            throw new UnauthorizedAccessException("Invalid email or password.");
         }
 
         var passwordIsValid = await identityService.CheckPasswordAsync(request.Email, request.Password, cancellationToken);
@@ -40,7 +40,6 @@ public sealed class LoginCommandHandler
         var refreshTokenEntity = new RefreshToken(userId.Value, hashRefreshToken, refreshToken.ExpireAt);
         //add to db
         await refreshTokenRepository.AddAsync(refreshTokenEntity, cancellationToken);
-        var result =  await unitOfWork.SaveChangesAsync(cancellationToken);
         return new LoginResponse(accessToken.Token, refreshToken.Token, accessToken.ExpiresAt);
     }
 }
