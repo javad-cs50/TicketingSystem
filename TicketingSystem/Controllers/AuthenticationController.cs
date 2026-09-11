@@ -6,12 +6,12 @@ using TicketingSystem.Application.Features.Authentication.DTOs;
 
 namespace TicketingSystem.Api.Controllers;
 
-[Route("api/[controller]")]
-[ApiVersion("1")]
+[Route("api/v{version:apiVersion}/auth")]
+[ApiVersion("1.0")]
 [ApiController]
 public class AuthenticationController(ISender sender) : ControllerBase
 {
-    [HttpPost]
+    [HttpPost("login")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
