@@ -11,4 +11,5 @@ public sealed class JwtOptions
     public string Audience { get; set; } = string.Empty;
 
     public int AccessTokenExpirationMinutes { get; set; }
+    public int RefreshTokenExpirationDays { get; set; }
 }
