@@ -8,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers
+    (configure =>configure.ReturnHttpNotAcceptable=true)
+    .AddXmlDataContractSerializerFormatters();
+
 builder.Services.AddApiVersioningConfiguration();
 builder.Services.AddOpenApi();
 // Add Clean Architecture Layers
