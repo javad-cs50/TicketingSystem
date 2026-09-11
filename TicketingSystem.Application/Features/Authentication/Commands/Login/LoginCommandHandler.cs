@@ -1,11 +1,17 @@
 ﻿using MediatR;
 using TicketingSystem.Application.Abstractions.Authentication;
 using TicketingSystem.Application.Abstractions.Identity;
+using TicketingSystem.Application.Abstractions.Persistence;
 using TicketingSystem.Application.Features.Authentication.DTOs;
+using TicketingSystem.Domain.Entities;
 
 namespace TicketingSystem.Application.Features.Authentication.Commands.Login;
 
-public sealed class LoginCommandHandler(IIdentityService identityService, ITokenService tokenService)
+public sealed class LoginCommandHandler
+    (IIdentityService identityService,
+    ITokenService tokenService ,
+    IRefreshTokenRepository refreshTokenRepository,
+    IUnitOfWork unitOfWork)
     : IRequestHandler<LoginCommand, LoginResponse>
 {
     public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -27,9 +33,14 @@ public sealed class LoginCommandHandler(IIdentityService identityService, IToken
 
         var tenantId = await identityService.FindTenantIdAsync(userId.Value, cancellationToken);
         var roles = await identityService.GetRolesAsync(userId.Value, cancellationToken);
-        
+        //create auth token
         var accessToken = tokenService.GenerateAccessToken(userId.Value, tenantId, roles);
         var refreshToken = tokenService.GenerateRefreshToken();
-        return new LoginResponse(accessToken.Token, refreshToken, accessToken.ExpiresAt);
+        var hashRefreshToken = tokenService.HashRefreshToken(refreshToken.Token);
+        var refreshTokenEntity = new RefreshToken(userId.Value, hashRefreshToken, refreshToken.ExpireAt);
+        //add to db
+        await refreshTokenRepository.AddAsync(refreshTokenEntity, cancellationToken);
+        var result =  await unitOfWork.SaveChangesAsync(cancellationToken);
+        return new LoginResponse(accessToken.Token, refreshToken.Token, accessToken.ExpiresAt);
     }
 }
