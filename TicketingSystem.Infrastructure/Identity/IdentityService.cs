@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Application.Abstractions.Identity;
 
 namespace TicketingSystem.Infrastructure.Identity;
@@ -30,5 +31,28 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
             return false;
 
         return await userManager.IsInRoleAsync(user, role);
+    }
+
+    public async Task<Guid?> FindTenantIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var tenantId = await userManager.Users
+            .AsNoTracking()
+            .Where(u => u.Id == userId)
+            .Select(u => u.TenantId)
+            .FirstOrDefaultAsync(cancellationToken);
+        return tenantId;
+    }
+    
+
+    public async Task<IReadOnlyCollection<string>> GetRolesAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var user =await userManager
+            .FindByIdAsync(userId.ToString());
+        if (user == null)
+            return Array.Empty<string>();
+
+        var roles = await userManager
+            .GetRolesAsync(user);
+        return (IReadOnlyCollection<string>)roles;
     }
 }
