@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TicketingSystem.Api.Common;
 using TicketingSystem.Application.Features.Authentication.Commands.Login;
