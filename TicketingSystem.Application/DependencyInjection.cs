@@ -1,10 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace TicketingSystem.Application
+namespace TicketingSystem.Application;
+
+public static class DependencyInjection
 {
-    internal class DependencyInjection
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+        });
+
+        return services;
     }
 }

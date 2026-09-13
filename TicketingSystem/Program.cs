@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using TicketingSystem.Api.Extensions;
+using TicketingSystem.Application;
 using TicketingSystem.Infrastructure;
 using TicketingSystem.Infrastructure.Identity;
 
@@ -16,6 +17,7 @@ builder.Services.AddApiVersioningConfiguration();
 builder.Services.AddOpenApi();
 // Add Clean Architecture Layers
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
