@@ -55,4 +55,25 @@ public sealed class IdentityService(UserManager<ApplicationUser> userManager) : 
             .GetRolesAsync(user);
         return (IReadOnlyCollection<string>)roles;
     }
+
+    public async Task<(bool Succeeded, string[] Errors, Guid? UserId)> 
+        CreateUserAsync(string email, string password, Guid? tenantId = null, CancellationToken cancellationToken = default)
+    {
+        var user = new ApplicationUser
+        {
+            UserName = email,
+            Email = email,
+            TenantId = tenantId,
+            IsActive = true,
+        };
+        var result =await userManager.CreateAsync(user, password);
+        if (!result.Succeeded)
+        {
+            var errors = result.Errors
+                .Select(e=>e.Description)
+                .ToArray();
+            return (false,errors,null );
+        }
+        return (true, Array.Empty<string>(), user.Id);
+    }
 }

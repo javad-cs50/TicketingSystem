@@ -10,4 +10,7 @@ public interface IIdentityService
     Task<IReadOnlyCollection<string>> GetRolesAsync(Guid userId, CancellationToken cancellationToken);
 
     Task<bool> IsInRoleAsync(Guid userId, string role, CancellationToken cancellationToken);
+
+    Task<(bool Succeeded, string[] Errors, Guid? UserId)> 
+        CreateUserAsync(string email , string password,Guid? tenantId =null,CancellationToken cancellationToken=default);
 }
