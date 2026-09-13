@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Identity;
 using TicketingSystem.Api.Extensions;
+using TicketingSystem.Api.Middlewares;
 using TicketingSystem.Application;
 using TicketingSystem.Infrastructure;
 using TicketingSystem.Infrastructure.Identity;
@@ -19,8 +20,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
+builder.Services.AddProblemDetails();
 var app = builder.Build();
 
+app.UseExceptionHandler();
 using (var scope = app.Services.CreateScope())
 {
     var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
