@@ -1,7 +1,7 @@
 
 using Microsoft.AspNetCore.Identity;
+using Scalar.AspNetCore;
 using TicketingSystem.Api.Extensions;
-using TicketingSystem.Api.Middlewares;
 using TicketingSystem.Application;
 using TicketingSystem.Infrastructure;
 using TicketingSystem.Infrastructure.Identity;
@@ -33,6 +33,7 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
