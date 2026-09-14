@@ -20,7 +20,7 @@ public sealed class RefreshToken : BaseEntity
         ExpiresAt = expiresAt;
     }
 
-    public void Revoke(Guid replacedByTokenId)
+    public void Revoke(Guid? replacedByTokenId =null)
     {
         if (IsRevoked)
             return;
