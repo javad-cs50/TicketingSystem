@@ -12,7 +12,7 @@ namespace TicketingSystem.Api.Controllers;
 [Route("api/v{version:apiVersion}/auth")]
 [ApiVersion("1.0")]
 [ApiController]
-public class AuthenticationController(ISender sender) : ControllerBase
+public sealed class AuthenticationController(ISender sender) : ControllerBase
 {
 
     [HttpPost("login")]
