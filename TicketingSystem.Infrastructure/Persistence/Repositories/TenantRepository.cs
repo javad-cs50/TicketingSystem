@@ -7,22 +7,29 @@ namespace TicketingSystem.Infrastructure.Persistence.Repositories;
 public sealed class TenantRepository(
     ApplicationDbContext dbContext) : ITenantRepository
 {
-    public async Task<Tenant?> GetByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken)
+    public async Task<Tenant?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await dbContext.Tenants
-            .FirstOrDefaultAsync(
-                x => x.Id == id,
-                cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task AddAsync(
-        Tenant tenant,
-        CancellationToken cancellationToken)
+    public async Task<Tenant?> GetByIdNoTrackedAsync(Guid id, CancellationToken cancellationToken)
     {
-        await dbContext.Tenants.AddAsync(
-            tenant,
-            cancellationToken);
+        return await dbContext.Tenants
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
+    public async Task<IEnumerable<Tenant>> GetListAsync(CancellationToken cancellationToken)
+    {
+        return await dbContext.Tenants
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+
+    public async Task AddAsync(Tenant tenant, CancellationToken cancellationToken)
+    {
+        await dbContext.Tenants.AddAsync(tenant, cancellationToken);
+    }
+
 }
