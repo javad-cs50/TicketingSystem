@@ -10,11 +10,15 @@ public sealed class UpdateTenantValidator:AbstractValidator<UpdateTenantCommand>
             .NotEmpty();
 
         RuleFor(t => t.Name)
-            .NotEmpty()
-            .MaximumLength(150);
+            .MaximumLength(150)
+            .When(t=>t.Name is not null);
 
         RuleFor(t=>t.Slug)
-            .NotEmpty()
-            .MaximumLength(100);
+            .MaximumLength(100)
+            .When(t=>t.Slug is not null);
+
+        RuleFor(t => t)
+            .Must(t => t.Name is not null || t.Slug is not null);
+            
     }
 }

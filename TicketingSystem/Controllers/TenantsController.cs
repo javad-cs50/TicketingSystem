@@ -5,6 +5,7 @@ using TicketingSystem.Api.Common;
 using TicketingSystem.Application.Features.Tenants.Commands.Activate;
 using TicketingSystem.Application.Features.Tenants.Commands.Create;
 using TicketingSystem.Application.Features.Tenants.Commands.Deactivate;
+using TicketingSystem.Application.Features.Tenants.Commands.Update;
 using TicketingSystem.Application.Features.Tenants.DTOs;
 using TicketingSystem.Application.Features.Tenants.Queries.GetById;
 using TicketingSystem.Application.Features.Tenants.Queries.GetList;
@@ -23,8 +24,8 @@ public sealed class TenantsController(ISender sender) : ControllerBase
     [HttpGet(Name = "GetTenants")]
     public async Task<IActionResult> GetTenants(CancellationToken cancellationToken)
     {
-        var result = await sender.Send(new GetTenantListQuery(), cancellationToken);
-        return Ok(new ApiResponse<IEnumerable<GetTenantResponse>>(result, null));
+        var res = await sender.Send(new GetTenantListQuery(), cancellationToken);
+        return Ok(new ApiResponse<IEnumerable<GetTenantResponse>>(res, null));
     }
 
 
@@ -35,20 +36,20 @@ public sealed class TenantsController(ISender sender) : ControllerBase
     [HttpGet("{id:guid}",Name ="GetTenant")]
     public async Task<IActionResult> GetTenant(Guid id, CancellationToken cancellationToken)
     {
-        var result = await sender.Send(new GetTenantByIdQuery(id), cancellationToken);
-        return Ok(new ApiResponse<GetTenantResponse>(result, null));
+        var res = await sender.Send(new GetTenantByIdQuery(id), cancellationToken);
+        return Ok(new ApiResponse<GetTenantResponse>(res, null));
     }
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [HttpPost(Name = "CreateTenant")]
-    public async Task<IActionResult> CreateTenant([FromBody]CreateTenantCommand createTenantCommand,CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateTenant([FromBody]CreateTenantCommand req,CancellationToken cancellationToken)
     {
-        var result =await sender.Send(createTenantCommand, cancellationToken);
+        var res =await sender.Send(req, cancellationToken);
         return CreatedAtRoute("GetTenant",
-            new {id = result.Id },
-            new ApiResponse<CreateTenantResponse>(result,null));
+            new {id = res.Id },
+            new ApiResponse<CreateTenantResponse>(res,null));
     }
 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -73,6 +74,17 @@ public sealed class TenantsController(ISender sender) : ControllerBase
         await sender.Send(new DeactivateTenantCommand(id),cancellationToken);
         return NoContent();
     }
-    //Todo: 
-    //  -update action remaining
+   
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [HttpPatch("{id:guid}",Name ="UpdateTenant")]
+    public async Task<IActionResult> UpdateTenant(Guid id, [FromBody]UpdateTenantCommand req,CancellationToken cancellationToken)
+    {
+        req = req with { TenantId = id };
+        await sender.Send(req, cancellationToken);
+
+        return NoContent();
+    }
 }
