@@ -45,12 +45,14 @@ public static class DependencyInjection
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         // unit of work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         // Identity abstraction
         services.AddScoped<IIdentityService, IdentityService>();
         //UserService
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IApplicationUser, ApplicationUser>();
         //jwt
         services.AddScoped<ITokenService,JwtTokenService>();
 
