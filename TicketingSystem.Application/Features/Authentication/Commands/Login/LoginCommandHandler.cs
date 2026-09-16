@@ -40,6 +40,7 @@ public sealed class LoginCommandHandler
         var refreshTokenEntity = new TicketingSystem.Domain.Entities.RefreshToken(userId.Value, hashRefreshToken, refreshToken.ExpireAt);
         //add to db
         await refreshTokenRepository.AddAsync(refreshTokenEntity, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
         return new LoginResponse(accessToken.Token, refreshToken.Token, accessToken.ExpiresAt,refreshToken.ExpireAt);
     }
 }
