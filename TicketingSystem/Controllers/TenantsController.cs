@@ -21,6 +21,7 @@ public sealed class TenantsController(ISender sender) : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //empty list return with 200 status code.
     [HttpGet(Name = "GetTenants")]
     public async Task<IActionResult> GetTenants(CancellationToken cancellationToken)
     {
@@ -32,7 +33,6 @@ public sealed class TenantsController(ISender sender) : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    //empty list return with 200 status code.
     [HttpGet("{id:guid}",Name ="GetTenant")]
     public async Task<IActionResult> GetTenant(Guid id, CancellationToken cancellationToken)
     {
