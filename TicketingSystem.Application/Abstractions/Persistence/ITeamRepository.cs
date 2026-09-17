@@ -5,7 +5,8 @@ namespace TicketingSystem.Application.Abstractions.Persistence;
 public interface ITeamRepository
 {
     Task<Team?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-
+    Task<Team?> GetByIdNoTrackAsync(Guid id, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Team>?> GetListAsync(Guid id, CancellationToken cancellationToken);
     Task AddAsync(Team team, CancellationToken cancellationToken);
 }
 
