@@ -13,7 +13,7 @@ public sealed class GetTeamByIdQueryHandler
     {
         var tenantId = currentUserService.TenantId ?? throw new UnauthorizedAccessException("Tenant context is missing.");
 
-        var team = await teamRepository.GetByIdNoTrackAsync(request.TeamId, cancellationToken);
+        var team = await teamRepository.GetByIdNoTrackAsync(request.TeamId,tenantId, cancellationToken);
 
         if (team is null)
             return null;
