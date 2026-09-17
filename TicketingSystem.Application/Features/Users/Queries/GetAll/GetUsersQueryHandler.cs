@@ -7,9 +7,9 @@ namespace TicketingSystem.Application.Features.Users.Queries.GetAll;
 
 public sealed class GetUsersQueryHandler
     (IUserRepository userRepository , ICurrentUserService currentUserService) 
-    : IRequestHandler<GetUsersQuery, IReadOnlyList<UserResponse>?>
+    : IRequestHandler<GetUsersQuery, IReadOnlyList<UserResponse>>
 {
-    public async Task<IReadOnlyList<UserResponse>?> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<UserResponse>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
         var tenantId = currentUserService.TenantId;
         if (tenantId is null)
