@@ -11,4 +11,6 @@ public interface IApplicationUser
     void SetTenant(Guid tenantId);
     void Activate();
     void Deactivate();
+    void Update(string? UserName, string? Email);
+        
 }
