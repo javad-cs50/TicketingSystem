@@ -34,12 +34,10 @@ public sealed class Team : BaseEntity
         SetDescription(description);
     }
 
-    public void Update(
-        string name,
-        string? description = null)
+    public void Update(string? name, string? description)
     {
-        SetName(name);
-        SetDescription(description);
+        this.Name = name ?? this.Name;
+        this.Description = description ?? this.Description;
 
         UpdatedAt = DateTime.UtcNow;
     }
