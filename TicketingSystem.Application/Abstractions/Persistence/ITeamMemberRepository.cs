@@ -1,0 +1,14 @@
+﻿using TicketingSystem.Domain.Entities;
+
+namespace TicketingSystem.Application.Abstractions.Persistenceک
+{
+    public interface ITeamMemberRepository
+    {
+        Task<bool> ExistsAsync(Guid teamId, Guid userId, CancellationToken cancellationToken);
+
+        Task<IReadOnlyList<TeamMember>> GetByTeamIdAsync(Guid teamId, CancellationToken cancellationToken);
+        Task AddAsync(TeamMember teamMember, CancellationToken cancellationToken);
+
+        Task RemoveAsync(Guid teamId, Guid userId, CancellationToken cancellationToken);
+    }
+}
