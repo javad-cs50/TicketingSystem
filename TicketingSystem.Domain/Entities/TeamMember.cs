@@ -12,7 +12,7 @@ public sealed class TeamMember
 
     private TeamMember() { }
 
-    internal TeamMember(Guid teamId, Guid userId)
+    public TeamMember(Guid teamId, Guid userId)
     {
         if (teamId == Guid.Empty)
             throw new DomainException("Team ID cannot be empty.");
