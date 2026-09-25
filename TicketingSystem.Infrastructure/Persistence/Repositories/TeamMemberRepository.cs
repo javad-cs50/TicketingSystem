@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TicketingSystem.Application.Abstractions.Persistence;
+using TicketingSystem.Application.Features.TeamMembers.DTOs;
 using TicketingSystem.Domain.Entities;
 
 namespace TicketingSystem.Infrastructure.Persistence.Repositories;
@@ -12,11 +13,15 @@ public sealed class TeamMemberRepository(ApplicationDbContext context) : ITeamMe
             .AnyAsync(x => x.TeamId == teamId && x.UserId == userId, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<TeamMember>> GetByTeamIdAsync(Guid teamId, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TeamMemberResponse>> GetByTeamIdAsync(Guid teamId, CancellationToken cancellationToken)
     {
-        return await context.TeamMembers
+        return await (from member in context.TeamMembers
+                     join user in context.Users
+                     on member.UserId equals user.Id
+                     where member.TeamId ==teamId
+                     select new TeamMemberResponse(user.Id ,user.UserName,user.Email)
+                     )
             .AsNoTracking()
-            .Where(x => x.TeamId == teamId)
             .ToListAsync(cancellationToken);
     }
 
