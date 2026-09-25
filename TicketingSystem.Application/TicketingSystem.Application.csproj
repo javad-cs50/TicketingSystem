@@ -9,4 +9,9 @@
     <ProjectReference Include="..\TicketingSystem.Domain\TicketingSystem.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\TeamMembers\DTOs\" />
+    <Folder Include="Features\TeamMembers\Queries\" />
+  </ItemGroup>
+
 </Project>

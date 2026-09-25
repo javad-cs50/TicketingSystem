@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TicketingSystem.Application.Abstractions.Persistenceک;
+using TicketingSystem.Application.Abstractions.Persistence;
 using TicketingSystem.Domain.Entities;
 
 namespace TicketingSystem.Infrastructure.Persistence.Repositories;
@@ -25,9 +25,9 @@ public sealed class TeamMemberRepository(ApplicationDbContext context) : ITeamMe
         await context.TeamMembers.AddAsync(teamMember, cancellationToken);
     }
 
-    public async Task RemoveAsync(Guid teamId, Guid userId, CancellationToken cancellationToken)
+    public async Task<int> RemoveAsync(Guid teamId, Guid userId, CancellationToken cancellationToken)
     {
-        await context.TeamMembers
+       return await context.TeamMembers
             .Where(x => x.TeamId == teamId &&
                         x.UserId == userId)
             .ExecuteDeleteAsync(cancellationToken);

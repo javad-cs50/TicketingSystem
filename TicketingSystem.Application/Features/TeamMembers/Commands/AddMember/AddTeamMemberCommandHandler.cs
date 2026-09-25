@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using TicketingSystem.Application.Abstractions.Identity;
 using TicketingSystem.Application.Abstractions.Persistence;
-using TicketingSystem.Application.Abstractions.Persistenceک;
+using TicketingSystem.Application.Abstractions.Persistence;
 using TicketingSystem.Domain.Entities;
 
 namespace TicketingSystem.Application.Features.TeamMembers.Commands.AddMember;
